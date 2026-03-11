@@ -599,8 +599,10 @@
   <div class="container my-5">
     <div class="p-5 text-center" style="background:#1c2d1c; border-radius:100px; border:2px solid #c24f0f;">
       <h3 class="text-light">Subscribe for fresh updates & weekly menu</h3>
-      <input type="email" class="form-control-super w-50 mx-auto my-4" placeholder="Your email">
-      <button class="btn btn-super">Subscribe</button>
+      <input type="email" id="newsletterEmail" class="form-control-super w-50 mx-auto my-4" placeholder="Your email">
+<button class="btn btn-super" onclick="subscribeNewsletter()">Subscribe</button>
+
+<div id="newsletterMessage" style="margin-top:10px;font-weight:bold;"></div>
     </div>
   </div>
 
@@ -799,15 +801,27 @@ window.placeOrder = function() {
   });
 
   const templateParams = {
-    customer_name: name,
-    phone: phone,
-    email: email,
-    address: address,
-    meal_type: mealType,
-    plan: planText,
-    dishes: selectedDishes.join("\n"),
-    total: total
-  };
+  customer_name: name,
+  phone: phone,
+  email: email,
+  address: address,
+  meal_type: mealType,
+  plan: planText,
+  dishes: selectedDishes.join("\n"),
+  total: total,
+
+  title: "FreshBite Order Confirmation 🍽️",
+
+  message: "Thank you for ordering from FreshBite!",
+
+  order_details: "Dishes:\n" + selectedDishes.join("\n") +
+                 "\n\nTotal Amount: ₹" + total +
+                 "\nPlan: " + planText,
+
+  newsletter_image: "",
+
+  footer: "We will contact you shortly."
+};
 
   messageBox.style.color = "orange";
   messageBox.innerHTML = "⏳ Placing order... Please wait.";
@@ -852,6 +866,53 @@ window.placeOrder = function() {
       console.error("Admin mail error:", error);
   });
 };
+function subscribeNewsletter(){
+
+  const email = document.getElementById("newsletterEmail").value.trim();
+  const msg = document.getElementById("newsletterMessage");
+
+  if(email === ""){
+      msg.style.color="red";
+      msg.innerHTML="❌ Please enter your email";
+      return;
+  }
+
+  msg.style.color="orange";
+  msg.innerHTML="⏳ Subscribing...";
+
+  const params = {
+
+      customer_name: "FreshBite Customer",
+
+      email: email,
+
+      title: "FreshBite Weekly Newsletter 🍛",
+
+      message: "Thank you for subscribing to FreshBite! Here is our latest newsletter.",
+
+      order_details: "",
+
+      newsletter_image: "https://drive.google.com/uc?export=view&id=1n2fIF4PTPiRXxg1UKcTtUTqlJ80thwFj",
+
+      footer: "Stay tuned for delicious updates every week!"
+  };
+
+  emailjs.send("service_dayn5si","template_w3kqqsi",params)
+
+  .then(function(){
+
+      msg.style.color="lightgreen";
+      msg.innerHTML="✅ Successfully subscribed! Check your email.";
+
+      document.getElementById("newsletterEmail").value="";
+
+  })
+
+  .catch(function(){
+      msg.style.color="red";
+      msg.innerHTML="❌ Subscription failed.";
+  });
+}
   </script>
   <style>
     .testimonial-card{ background: #1f321fcc; backdrop-filter: blur(8px); border:2px solid #c24f0f; border-radius:60px; padding:30px; font-size:1.5rem; }
