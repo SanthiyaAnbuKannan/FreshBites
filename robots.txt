@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block unnecessary folders if any
+Disallow: /node_modules/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://santhiyaanbukannan.github.io/FreshBites/sitemap.xml
